@@ -1,6 +1,6 @@
 {
   "name": "katar-worker-http",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "HTTP Server for interacting with polling katar workers",
   "main": "index.js",
   "scripts": {

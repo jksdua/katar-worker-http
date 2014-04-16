@@ -1,5 +1,5 @@
-Incoming Workers Server for Queue
-=================================
+Katar HTTP Polling Workers
+==========================
 
 Creates a HTTP server that binds to a katar server and listens for incoming workers to:
 - Distribute tasks to workers
@@ -15,10 +15,10 @@ Usage
 ```js
 // create a katar queue server with default configuration
 var katar = require('katar')();
-// create a dummy queue
+// create a dummy queue that deletes tasks when they are done
 var queue = katar.queue('queue', { persistent: false });
 
-// create a server that workers can poll to fetch jobs
+// create a server that workers can poll to fetch tasks
 var workerServer = require('http-queue-worker')({
 	katar: katar, // required
 	port: 3000, // required
@@ -26,8 +26,8 @@ var workerServer = require('http-queue-worker')({
 });
 
 // let the workers know:
-// - they should poll for jobs in this queue every 1000 milliseconds
-// - the custom configuration required to execute jobs
+// - they should poll for tasks in this queue every 1000 milliseconds
+// - the custom configuration required to execute tasks
 workerServer.config(queue, { interval: 1000, custom: 'config' });
 ```
 
@@ -56,9 +56,9 @@ GET /v1/queue/:queue
 A json payload is returned that contains the interval at which the worker should poll the server and any other custom application level configuration.
 
 ```js
-// 10 seconds, specified in milliseconds
 {
 	configuration: {
+		// 10 seconds, specified in milliseconds
 		interval: 10000,
 		some: 'other',
 		data: { can: { go: 'here' } },
@@ -90,11 +90,11 @@ Otherwise, the server will send a JSON payload with a `200 OK` status code. The 
 ```
 
 
-### Mark a job as done
+### Mark task/tasks as done
 
 The exact same route can be used to specify when a task has been completed. Upon receiving the request, the server will issue a new task or return `204 No Content`.
 
-#### Reuest
+#### Request
 
 ```
 POST /v1/queue/:queue
@@ -107,17 +107,17 @@ POST /v1/queue/:queue
 }
 ```
 
-### Response
+#### Response
 
 The server sends a `204 No Content` status code if there are no more tasks to execute
 
-Otherwise, the server will send a JSON payload with a `200 OK` status code and a list of tasks. See "Poll for next queued task" above for a description of the response.
+Otherwise, the server will send a JSON payload with a `200 OK` status code and a list of tasks. See [Poll for next queued task](#poll-for-next-queued-task) above for a description of the response.
 
 
 Configuration
 -------------
 
-Application specific configuration to be sent down to workers for each of the queues. Any arbitrary configuration settings can be set based on the requirements of the application.
+Application specific configuration can be sent to workers for each of the queues. Any arbitrary configuration setting hash can be set based on the requirements of the application.
 
 ### Polling interval
 
@@ -131,7 +131,7 @@ var katar = require('katar')();
 // create a dummy queue
 var queue = katar.queue('queue', { persistent: false });
 
-// create a server that workers can poll to fetch jobs
+// create a server that workers can poll to fetch tasks
 var workerServer = require('http-queue-worker')({
 	katar: katar, // required
 	port: 3000, // required
@@ -153,7 +153,7 @@ workerServer.config(queue, {
 Clients
 -------
 
-Clients that interact with the server can be written in any language. Simply call a `GET` method to get the queue configuration, then send `POST` requests to fetch new jobs or mark jobs as done/failed.
+Clients that interact with the server can be written in any language. Simply call a `GET` method to get the queue configuration, then send `POST` requests to fetch new tasks or mark tasks as done/failed.
 
 
 
