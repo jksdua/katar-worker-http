@@ -1,0 +1,35 @@
+{
+  "name": "katar-worker-http",
+  "version": "0.0.1",
+  "description": "HTTP Server for interacting with polling katar workers",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --bail --harmony --timeout 5000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jksdua/katar-worker-http"
+  },
+  "keywords": [
+    "queue",
+    "katar",
+    "worker",
+    "http"
+  ],
+  "author": "Jaap Karan Singh",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jksdua/katar-worker-http/issues"
+  },
+  "homepage": "https://github.com/jksdua/katar-worker-http",
+  "devDependencies": {
+    "request": "~2.34.0",
+    "chai": "~1.9.0",
+    "mocha": "~1.18.0",
+    "co": "~3.0.5"
+  },
+  "dependencies": {
+    "koa-framework": "~1.0.0",
+    "katar": "~0.0.1"
+  }
+}
